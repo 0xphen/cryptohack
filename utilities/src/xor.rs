@@ -7,12 +7,20 @@ mod xor {
         // 1. Convert each character in `a` to its ASCII or unioode representation.
         // 2 Convert each unicode value to decimal and concatenate the result.
         // 3. Xor a ^ b
+
+        // If size of binary `b` is less than 8 (bits), pad 0's to its MSBs.
+        let pad_binary = |b: String| -> String {
+            let rem = 8 - b.len();
+            return format!("{}{}", "0".repeat(rem), &b);
+        };
+
         let a_binary: Vec<String> = a
             .chars()
             .collect::<Vec<_>>()
             .into_iter()
             .map(|e| e as u8)
             .map(|e_u8| HexToBase64::decimal_to_binary(e_u8 as u32))
+            .map(|b| pad_binary(b))
             .collect();
 
         let b_binary = HexToBase64::decimal_to_binary(b);
@@ -53,6 +61,6 @@ mod tests {
     #[test]
     fn xor_a_b() {
         let result = xor::xor_str("label", 13);
-        println!("ANS: {:?}", result);
+        assert_eq!(result, "aloha")
     }
 }
