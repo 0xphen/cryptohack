@@ -1,7 +1,7 @@
 pub mod int_to_msg {
     use num_bigint::BigUint;
 
-    use crate::{base_10_to_16::base_10_to_16, hex_to_ascii::hex_to_ascii};
+    use crate::{base_10_to_16::base_10_to_16, to_ascii::hex_to_ascii};
 
     // Steps to convert an integer to a message.
     // 1. Convert integer (BigNumber) to Hexadecimal.
@@ -9,7 +9,7 @@ pub mod int_to_msg {
     // 3. Convert ASCII to string.
     pub fn into(value: BigUint) -> String {
         let hex = base_10_to_16::into_bn(value);
-        hex_to_ascii::hex_to_ascii(&hex)
+        hex_to_ascii::to_ascii(&hex)
     }
 
     #[cfg(test)]

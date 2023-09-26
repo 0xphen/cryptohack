@@ -20,7 +20,7 @@ pub mod hex_to_ascii {
         }
     }
 
-    pub fn hex_to_ascii(hex: &str) -> String {
+    pub fn to_ascii(hex: &str) -> String {
         let binary = HexToBase64::hex_to_binary(hex);
 
         let ascii_string: String = binary
@@ -40,6 +40,25 @@ pub mod hex_to_ascii {
     }
 }
 
+pub mod binary_to_ascii {
+    use hex_to_base64::HexToBase64;
+
+    pub fn to_ascii(b: &str) -> String {
+        let ascii: String = b
+            .chars()
+            .collect::<Vec<_>>()
+            .chunks(8)
+            .map(|chunk| chunk.iter().collect::<String>())
+            .map(|b| {
+                let dec = HexToBase64::binary_to_decimal(&b);
+                (dec as u8) as char
+            })
+            .collect();
+
+        ascii
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -55,7 +74,7 @@ mod tests {
 
     #[test]
     fn can_convert_bytes_to_ascii_string() {
-        let ascii_string = hex_to_ascii::hex_to_ascii("63727970746f7b596f755f77696c6c5f62655f776f726b696e675f776974685f6865785f737472696e67735f615f6c6f747d");
+        let ascii_string = hex_to_ascii::to_ascii("63727970746f7b596f755f77696c6c5f62655f776f726b696e675f776974685f6865785f737472696e67735f615f6c6f747d");
 
         assert_eq!(
             ascii_string,
@@ -69,5 +88,11 @@ mod tests {
             hex_to_ascii::hex_to_base64("72bca9b68fc16ac7beeb8f849dca1d8a783e8acf9679bf9269f7bf");
 
         assert_eq!(base64_string, "crypto/Base+64+Encoding+is+Web+Safe/")
+    }
+
+    #[test]
+    fn can_convert_binary_to_ascii() {
+        let result = binary_to_ascii::to_ascii("010000010100001101000101");
+        assert_eq!(result, "ACE");
     }
 }
