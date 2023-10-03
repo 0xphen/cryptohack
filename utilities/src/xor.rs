@@ -5,7 +5,7 @@ mod solution {
     #[allow(dead_code)]
     pub fn solution(a: &str, b: u32) -> String {
         // Steps to xor a and b.
-        // 1. Convert each character in `a` to its ASCII or unioode representation.
+        // 1. Convert each character in `a` to its ASCII or unicode representation.
         // 2 Convert each unicode value to decimal and concatenate the result.
         // 3. Xor a ^ b
 
@@ -52,10 +52,37 @@ mod solution {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::to_ascii::binary_to_ascii;
+    use hex_to_base64::HexToBase64;
 
     #[test]
     fn xor_a_b() {
         let result = solution::solution("label", 13);
         assert_eq!(result, "aloha")
+    }
+
+    #[test]
+    fn xor_properties() {
+        let key1 = "a6c8b6733c9b22de7bc0253266a3867df55acde8635e19c73313";
+        let key2_xor_key1 = "37dcb292030faa90d07eec17e3b1c6d8daf94c35d4c9191a5e1e";
+        
+        let key2_xor_key3 = "c1545756687e7573db23aa1c3452a098b71a7fbf0fddddde5fc1";
+        let flag_xor_key1_xor_key3_xor_key2 =
+            "04ee9855208a2cd59091d04767ae47963170d1660df7f56f5faf";
+
+        let key1_binary = HexToBase64::hex_to_binary(key1);
+        let key2_xor_key3_binary = HexToBase64::hex_to_binary(key2_xor_key3);
+        let flag_xor_key1_xor_key3_xor_key2_binary =
+            HexToBase64::hex_to_binary(flag_xor_key1_xor_key3_xor_key2);
+
+        let flag = solution::xor(
+            &solution::xor(&key1_binary, &key2_xor_key3_binary),
+            &flag_xor_key1_xor_key3_xor_key2_binary,
+        );
+
+        assert_eq!(
+            binary_to_ascii::to_ascii(&flag),
+            "crypto{x0r_i5_ass0c1at1v3}"
+        );
     }
 }
