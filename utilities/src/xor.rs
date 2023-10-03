@@ -1,4 +1,4 @@
-mod solution {
+pub mod solution {
     use crate::to_ascii;
     use hex_to_base64::HexToBase64;
 
@@ -63,21 +63,25 @@ mod tests {
 
     #[test]
     fn xor_properties() {
-        let key1 = "a6c8b6733c9b22de7bc0253266a3867df55acde8635e19c73313";
-        let key2_xor_key1 = "37dcb292030faa90d07eec17e3b1c6d8daf94c35d4c9191a5e1e";
-        
-        let key2_xor_key3 = "c1545756687e7573db23aa1c3452a098b71a7fbf0fddddde5fc1";
-        let flag_xor_key1_xor_key3_xor_key2 =
-            "04ee9855208a2cd59091d04767ae47963170d1660df7f56f5faf";
+        let k1 = "a6c8b6733c9b22de7bc0253266a3867df55acde8635e19c73313";
+        let k2_xor_k1 = "37dcb292030faa90d07eec17e3b1c6d8daf94c35d4c9191a5e1e";
 
-        let key1_binary = HexToBase64::hex_to_binary(key1);
-        let key2_xor_key3_binary = HexToBase64::hex_to_binary(key2_xor_key3);
-        let flag_xor_key1_xor_key3_xor_key2_binary =
-            HexToBase64::hex_to_binary(flag_xor_key1_xor_key3_xor_key2);
+        let k2_xor_k3 = "c1545756687e7573db23aa1c3452a098b71a7fbf0fddddde5fc1";
+        let flag_xor_k1_xor_k3_xor_k2 = "04ee9855208a2cd59091d04767ae47963170d1660df7f56f5faf";
+
+        let k1_binary = HexToBase64::hex_to_binary(k1);
+        let k2_xor_k3_binary = HexToBase64::hex_to_binary(k2_xor_k3);
+        let flag_xor_k1_xor_k3_xor_k2_binary =
+            HexToBase64::hex_to_binary(flag_xor_k1_xor_k3_xor_k2);
+
+        // We know from the self inverse property of xor, a xor a = 0.
+        // Hence,  we can find unknown keys by xoring the already known keys.
+        // f ^ k1 ^ k2 ^ k3 = x  <=>  f ^ k1 ^ k2_xor_k3 = x
+        // We extract the unknown `f`: f = x ^ k1 ^ k2_xor_k3
 
         let flag = solution::xor(
-            &solution::xor(&key1_binary, &key2_xor_key3_binary),
-            &flag_xor_key1_xor_key3_xor_key2_binary,
+            &solution::xor(&k1_binary, &k2_xor_k3_binary),
+            &flag_xor_k1_xor_k3_xor_k2_binary,
         );
 
         assert_eq!(
