@@ -59,6 +59,16 @@ pub mod binary_to_ascii {
     }
 }
 
+pub mod str_to_binary {
+    pub fn to_binary(s: &str) -> String {
+        s.chars()
+            .collect::<Vec<_>>()
+            .into_iter()
+            .map(|c| format!("{:08b}", c as u8))
+            .collect::<String>()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -94,5 +104,12 @@ mod tests {
     fn can_convert_binary_to_ascii() {
         let result = binary_to_ascii::to_ascii("010000010100001101000101");
         assert_eq!(result, "ACE");
+    }
+
+    #[test]
+    fn can_convert_str_to_binary() {
+        let result = str_to_binary::to_binary("hello world");
+
+        assert_eq!(result, "0110100001100101011011000110110001101111001000000111011101101111011100100110110001100100")
     }
 }

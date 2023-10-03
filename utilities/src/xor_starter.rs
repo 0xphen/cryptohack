@@ -1,5 +1,5 @@
 pub mod solution {
-    use crate::to_ascii;
+    use crate::hex_ascii_base64;
     use hex_to_base64::HexToBase64;
 
     #[allow(dead_code)]
@@ -31,7 +31,7 @@ pub mod solution {
             .map(|a| xor(&a, &b_binary))
             .collect::<String>();
 
-        to_ascii::binary_to_ascii::to_ascii(&xor_result)
+        hex_ascii_base64::binary_to_ascii::to_ascii(&xor_result)
     }
 
     #[allow(dead_code)]
@@ -52,7 +52,7 @@ pub mod solution {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::to_ascii::binary_to_ascii;
+    use crate::hex_ascii_base64::binary_to_ascii;
     use hex_to_base64::HexToBase64;
 
     #[test]

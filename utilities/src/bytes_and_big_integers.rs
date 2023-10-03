@@ -1,7 +1,7 @@
 pub mod int_to_msg {
     use num_bigint::BigUint;
 
-    use crate::{base_10_to_16::base_10_to_16, to_ascii::hex_to_ascii};
+    use crate::{base_10_to_16::base_10_to_16, hex_ascii_base64::hex_to_ascii};
 
     // Steps to convert an integer to a message.
     // 1. Convert integer (BigNumber) to Hexadecimal.

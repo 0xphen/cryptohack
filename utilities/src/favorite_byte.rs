@@ -2,15 +2,15 @@
 pub mod favorite_byte {
     use hex_to_base64::HexToBase64;
 
-    use crate::to_ascii::binary_to_ascii;
-    use crate::xor::solution::xor;
+    use crate::hex_ascii_base64::binary_to_ascii;
+    use crate::xor_starter::solution::xor;
 
+    // 1. Convert `hex` to its binary representation.
+    // 2. The secret key is a single byte, which ranges from 0 to 255.
+    // 3. Employing brute force, we attempt XOR operations between each byte (0 - 255)
+    //    and each corresponding byte in the binary representation.
+    // 4. The most plausible decoded outcome is the solution.
     pub fn solution(hex: &str) -> Vec<(u32, String)> {
-        // 1. Convert `hex` to its binary representation.
-        // 2. The secret key is a single byte, which ranges from 0 to 255.
-        // 3. Employing brute force, we attempt XOR operations between each byte (0 - 255)
-        //    and each corresponding byte in the binary representation.
-        // 4. The most plausible decoded outcome is the solution.
         let binary = HexToBase64::hex_to_binary(hex);
 
         // Split the `binary` into 8 bit chunks
