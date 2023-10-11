@@ -9,7 +9,7 @@ pub mod int_to_msg {
     // 3. Convert ASCII to string.
     pub fn into(value: BigUint) -> String {
         let hex = base_10_to_16::into_bn(value);
-        hex_to_ascii::to_ascii(&hex)
+        hex_to_ascii(&hex)
     }
 
     #[cfg(test)]

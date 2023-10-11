@@ -1,5 +1,7 @@
 [workspace]
 members = [
   "register-ceasar-cypher-challenge",
-  "utilities"
+  "utilities",
+  "mathematics",
+  "utils"
 ]

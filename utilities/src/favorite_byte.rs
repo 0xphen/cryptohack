@@ -1,43 +1,29 @@
 // https://cryptohack.org/courses/intro/xorkey0/
 pub mod favorite_byte {
-    use hex_to_base64::HexToBase64;
-
-    use crate::hex_ascii_base64::binary_to_ascii;
-    use crate::xor_starter::solution::xor;
+    use crate::hex_ascii_base64::bytes_to_ascii;
+    use crate::xor_starter::xor_u32;
+    use utils::hex_to_bytes;
 
     // 1. Convert `hex` to its binary representation.
     // 2. The secret key is a single byte, which ranges from 0 to 255.
     // 3. Employing brute force, we attempt XOR operations between each byte (0 - 255)
     //    and each corresponding byte in the binary representation.
     // 4. The most plausible decoded outcome is the solution.
-    pub fn solution(hex: &str) -> Vec<(u32, String)> {
-        let binary = HexToBase64::hex_to_binary(hex);
+    pub fn solution(hex: &str) -> Vec<(u8, String)> {
+        let bytes = hex_to_bytes(hex);
 
-        // Split the `binary` into 8 bit chunks
-        let bytes = binary
-            .chars()
-            .collect::<Vec<_>>()
-            .chunks(8)
-            .map(|chunk| chunk.iter().collect::<String>())
-            .collect::<Vec<String>>();
-
-        let all_outcomes: Vec<(u32, String)> = (0..256)
-            .collect::<Vec<u32>>()
+        let all_outcomes: Vec<(u8, String)> = (0..=255)
+            .collect::<Vec<u8>>()
             .into_iter()
             .map(move |k| {
-                let key = format!("{:08b}", k);
-                (
-                    k,
-                    binary_to_ascii::to_ascii(
-                        &bytes
-                            .clone()
-                            .into_iter()
-                            .map(|byte| xor(&byte, &key))
-                            .collect::<String>(),
-                    ),
-                )
+                let x = bytes
+                    .iter()
+                    .map(|&byte| xor_u32(byte, k))
+                    .collect::<Vec<u8>>();
+
+                (k, bytes_to_ascii(x))
             })
-            .collect::<Vec<(u32, String)>>();
+            .collect::<Vec<(u8, String)>>();
 
         return all_outcomes;
     }
@@ -48,7 +34,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn solution() {
+    fn favorite_byte() {
         let outcomes = favorite_byte::solution(
             "73626960647f6b206821204f21254f7d694f7624662065622127234f726927756d",
         );
